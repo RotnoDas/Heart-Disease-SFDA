@@ -1,0 +1,5 @@
+domain,n_rows,chol_zero_to_nan,trestbps_zero_to_nan,positive_n,negative_n,positive_pct,total_predictor_missing
+cleveland,303,0,0,139,164,45.87458745874587,6
+hungary,294,0,0,106,188,36.054421768707485,782
+switzerland,123,123,0,115,8,93.4959349593496,396
+va_long_beach,200,49,1,149,51,74.5,748
