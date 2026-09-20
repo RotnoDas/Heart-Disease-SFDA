@@ -1,0 +1,71 @@
+{
+  "study": {
+    "name": "heart_sfda_cross_hospital",
+    "status": "frozen"
+  },
+
+  "data": {
+    "domains": [
+      "cleveland",
+      "hungary",
+      "switzerland",
+      "va_long_beach"
+    ],
+
+    "features": [
+      "age",
+      "sex",
+      "cp",
+      "trestbps",
+      "restecg",
+      "thalach",
+      "exang",
+      "oldpeak"
+    ],
+
+    "target_definition": "num > 0"
+  },
+
+  "single_head_source_epochs": {
+    "cleveland": 34,
+    "hungary": 32,
+    "switzerland": 44,
+    "va_long_beach": 33
+  },
+
+  "evaluation": {
+    "source_seeds": 10,
+    "target_crossfit_folds": 5,
+    "bootstrap_iterations": 5000,
+    "classification_threshold": 0.5
+  },
+
+  "single_head_methods": [
+    "source_only",
+    "pseudo_label_sfda",
+    "entropy_sfda",
+    "reliability_gated_sfda",
+    "conservative_candidate"
+  ],
+
+  "dual_head_methods": [
+    "dual_head_source_only",
+    "dlar_lcl"
+  ],
+
+  "primary_metrics": [
+    "roc_auc",
+    "brier",
+    "balanced_accuracy"
+  ],
+
+  "secondary_metrics": [
+    "pr_auc",
+    "sensitivity",
+    "specificity",
+    "f1",
+    "mcc",
+    "log_loss",
+    "ece"
+  ]
+}
