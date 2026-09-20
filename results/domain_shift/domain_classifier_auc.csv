@@ -1,0 +1,4 @@
+source,target,domain_classifier_auc,source_n,target_n
+cleveland,hungary,0.9069059967221212,303,294
+cleveland,switzerland,0.8953822211489442,303,123
+cleveland,va_long_beach,0.9102805280528052,303,200

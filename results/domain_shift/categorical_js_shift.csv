@@ -1,0 +1,13 @@
+source,target,feature,js_distance,categories
+cleveland,hungary,sex,0.04145162856803237,"0.0,1.0"
+cleveland,hungary,cp,0.20197747292845875,"1.0,2.0,3.0,4.0"
+cleveland,hungary,restecg,0.5282762861507094,"0.0,1.0,2.0"
+cleveland,hungary,exang,0.021004250928879805,"0.0,1.0"
+cleveland,switzerland,sex,0.26023650444106367,"0.0,1.0"
+cleveland,switzerland,cp,0.29933999829714053,"1.0,2.0,3.0,4.0"
+cleveland,switzerland,restecg,0.49437230925837583,"0.0,1.0,2.0"
+cleveland,switzerland,exang,0.10130300732422193,"0.0,1.0"
+cleveland,va_long_beach,sex,0.34598419620525644,"0.0,1.0"
+cleveland,va_long_beach,cp,0.17422185287311467,"1.0,2.0,3.0,4.0"
+cleveland,va_long_beach,restecg,0.5255151971712018,"0.0,1.0,2.0"
+cleveland,va_long_beach,exang,0.2738877249467374,"0.0,1.0"
