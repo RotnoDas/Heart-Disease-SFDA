@@ -1,0 +1,13 @@
+Source,Target,AUROC_mean_sd,PR_AUC_mean_sd,Balanced_accuracy_mean_sd,Brier_mean_sd
+Cleveland,Hungary,0.877 ± 0.003,0.835 ± 0.006,0.795 ± 0.006,0.140 ± 0.004
+Cleveland,Switzerland,0.754 ± 0.017,0.978 ± 0.003,0.639 ± 0.032,0.152 ± 0.006
+Cleveland,VA Long Beach,0.724 ± 0.007,0.882 ± 0.004,0.653 ± 0.002,0.180 ± 0.002
+Hungary,Cleveland,0.861 ± 0.005,0.850 ± 0.007,0.776 ± 0.009,0.152 ± 0.004
+Hungary,Switzerland,0.749 ± 0.008,0.973 ± 0.002,0.625 ± 0.032,0.242 ± 0.014
+Hungary,VA Long Beach,0.742 ± 0.005,0.887 ± 0.002,0.684 ± 0.010,0.224 ± 0.008
+Switzerland,Cleveland,0.795 ± 0.028,0.775 ± 0.036,0.500 ± 0.000,0.411 ± 0.016
+Switzerland,Hungary,0.861 ± 0.011,0.769 ± 0.029,0.500 ± 0.000,0.489 ± 0.012
+Switzerland,VA Long Beach,0.698 ± 0.022,0.855 ± 0.014,0.500 ± 0.000,0.215 ± 0.002
+VA Long Beach,Cleveland,0.844 ± 0.014,0.834 ± 0.012,0.626 ± 0.066,0.218 ± 0.010
+VA Long Beach,Hungary,0.882 ± 0.011,0.822 ± 0.015,0.711 ± 0.089,0.214 ± 0.013
+VA Long Beach,Switzerland,0.705 ± 0.014,0.966 ± 0.004,0.653 ± 0.091,0.117 ± 0.007

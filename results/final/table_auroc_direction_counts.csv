@@ -1,0 +1,6 @@
+method,method_label,improvement_directions,deterioration_directions,inconclusive_directions
+conservative_candidate,Conservative candidate,0,0,12
+dlar_lcl,DLAR-LCL port,1,0,11
+entropy_sfda,Entropy SFDA,1,1,10
+pseudo_label_sfda,Pseudo-label SFDA,1,0,11
+reliability_gated_sfda,Reliability-gated v1,0,0,12

@@ -1,0 +1,6 @@
+Method,AUROC_improvement,AUROC_deterioration,AUROC_inconclusive,Brier_improvement,Brier_deterioration,Brier_inconclusive
+Conservative candidate,0,0,12,5,0,7
+DLAR-LCL port,1,0,11,5,4,3
+Reliability-gated v1,0,0,12,1,4,7
+Pseudo-label SFDA,1,0,11,1,6,5
+Entropy SFDA,1,1,10,2,7,3
