@@ -1,0 +1,5 @@
+source,n,positive_n,negative_n,positive_pct,cv_runs,median_best_epoch,mean_best_epoch,sd_best_epoch,q25_best_epoch,q75_best_epoch,min_best_epoch,max_best_epoch
+cleveland,303,139,164,45.87458745874587,25,34,43.16,31.233902520605184,22.0,59.0,15,149
+hungary,294,106,188,36.054421768707485,25,32,42.12,28.55888653291651,20.0,55.0,15,116
+switzerland,123,115,8,93.4959349593496,25,44,83.44,70.76844871362755,29.0,125.0,25,283
+va_long_beach,200,149,51,74.5,25,33,36.44,23.28103663213188,20.0,41.0,14,125
