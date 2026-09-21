@@ -1,0 +1,6 @@
+source,target,seed,model_state,max_probability_difference,mean_probability_difference,passed
+va_long_beach,cleveland,0,source_only,5.960464483090178e-08,7.180097482286556e-09,True
+va_long_beach,cleveland,0,pseudo_label_sfda,1.1102230246251565e-16,1.0259486696206066e-17,True
+va_long_beach,cleveland,0,entropy_sfda,1.1102230246251565e-16,8.244230380879875e-18,True
+va_long_beach,cleveland,0,reliability_gated_sfda,1.1102230246251565e-16,9.89307645705585e-18,True
+va_long_beach,cleveland,0,conservative_candidate,1.1102230246251565e-16,8.7938457396052e-18,True

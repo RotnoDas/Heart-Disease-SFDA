@@ -1,0 +1,6 @@
+source,target,seed,model_state,max_probability_difference,mean_probability_difference,passed
+hungary,cleveland,8,source_only,1.1920928966180355e-07,9.368551859539703e-09,True
+hungary,cleveland,8,pseudo_label_sfda,1.1102230246251565e-16,3.4889124959084696e-17,True
+hungary,cleveland,8,entropy_sfda,1.1102230246251565e-16,3.514961973848055e-17,True
+hungary,cleveland,8,reliability_gated_sfda,1.1102230246251565e-16,2.99769376904771e-17,True
+hungary,cleveland,8,conservative_candidate,1.1102230246251565e-16,3.024029504986632e-17,True

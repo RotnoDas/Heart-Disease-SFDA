@@ -1,0 +1,6 @@
+source,target,seed,model_state,max_probability_difference,mean_probability_difference,passed
+cleveland,switzerland,9,source_only,5.960464477539063e-08,3.331560445850572e-09,True
+cleveland,switzerland,9,pseudo_label_sfda,1.1102230246251565e-16,2.1267991884333537e-17,True
+cleveland,switzerland,9,entropy_sfda,1.1102230246251565e-16,2.4765645722075394e-17,True
+cleveland,switzerland,9,reliability_gated_sfda,1.1102230246251565e-16,2.358095651896928e-17,True
+cleveland,switzerland,9,conservative_candidate,1.1102230246251565e-16,1.9998682023862704e-17,True

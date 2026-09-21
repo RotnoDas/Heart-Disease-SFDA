@@ -1,0 +1,6 @@
+source,target,seed,model_state,max_probability_difference,mean_probability_difference,passed
+va_long_beach,hungary,8,source_only,1.1920928955078125e-07,5.575264405284053e-09,True
+va_long_beach,hungary,8,pseudo_label_sfda,1.1102230246251565e-16,1.2272873571536594e-17,True
+va_long_beach,hungary,8,entropy_sfda,1.1102230246251565e-16,1.3972194527595508e-17,True
+va_long_beach,hungary,8,reliability_gated_sfda,1.1102230246251565e-16,1.4538634846281813e-17,True
+va_long_beach,hungary,8,conservative_candidate,1.1102230246251565e-16,1.2839313890222899e-17,True

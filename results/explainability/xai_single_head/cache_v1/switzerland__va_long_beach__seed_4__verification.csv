@@ -1,0 +1,6 @@
+source,target,seed,model_state,max_probability_difference,mean_probability_difference,passed
+switzerland,va_long_beach,4,source_only,1.1920928966180355e-07,6.854534183031724e-09,True
+switzerland,va_long_beach,4,pseudo_label_sfda,1.1102230246251565e-16,4.274358644806853e-17,True
+switzerland,va_long_beach,4,entropy_sfda,1.1102230246251565e-16,3.9968028886505634e-17,True
+switzerland,va_long_beach,4,reliability_gated_sfda,1.1102230246251565e-16,3.3861802251067274e-17,True
+switzerland,va_long_beach,4,conservative_candidate,1.1102230246251565e-16,3.3861802251067274e-17,True

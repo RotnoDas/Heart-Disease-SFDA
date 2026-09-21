@@ -1,0 +1,23 @@
+{
+  "analysis_type": "frozen_prediction_diagnostics",
+  "model_training_performed": false,
+  "adaptation_performed": false,
+  "threshold": 0.5,
+  "calibration_bins": 10,
+  "curve_grid_size": 201,
+  "metric_reproduction_tolerance": 1e-06,
+  "metric_reproduction_note": "Metrics were recomputed from serialized patient-level probability CSVs. Differences below 1e-6 are treated as floating-point serialization precision, not substantive result differences.",
+  "roc_pr_curve_summary": "Each source seed is evaluated independently. Curves are interpolated to a common grid and then averaged across the 10 source seeds. No probability ensemble is used for ROC/PR.",
+  "calibration_curve_summary": "Ten fixed probability bins are computed within each source seed and summarized across seeds.",
+  "confusion_matrix_summary": "Row-normalized confusion matrices are computed independently for each source seed at threshold 0.5 and averaged across seeds.",
+  "probability_distribution_summary": "For visualization only, each target patient's predicted probability is averaged across the 10 source seeds before plotting.",
+  "single_head_methods": [
+    "source_only",
+    "pseudo_label_sfda",
+    "entropy_sfda",
+    "reliability_gated_sfda",
+    "conservative_candidate"
+  ],
+  "dlar_comparison": "DLAR-LCL is compared only against its architecture-matched dual-head source-only reference. Absolute single-head and dual-head predictions are not treated as direct method comparisons.",
+  "switzerland_limitation": "Switzerland has very high outcome prevalence and only eight negative cases. PR curves, specificity, calibration, and thresholded diagnostics involving Switzerland should therefore be interpreted cautiously."
+}

@@ -1,0 +1,15 @@
+{
+  "analysis_version": "xai_association_v1",
+  "bootstrap_iterations": 5000,
+  "bootstrap_seed": 20260921,
+  "canonical_effect_tolerance": 1e-08,
+  "negative_adaptation_auc_definition": "delta_roc_auc < -1e-8",
+  "brier_worsened_definition": "brier_improvement < -1e-8",
+  "primary_explanation_comparison": "paired source-only vs adapted SHAP using identical fold background",
+  "feature_importance_cross_domain": "normalized within source-target-seed-model job",
+  "association_analysis": "exploratory; no multiplicity correction",
+  "direction_level_unit": "10 source seeds averaged within source-target-method",
+  "direction_level_n_per_method": 12,
+  "causal_interpretation": false,
+  "negative_adaptation_summary_type": "descriptive post-hoc analysis"
+}

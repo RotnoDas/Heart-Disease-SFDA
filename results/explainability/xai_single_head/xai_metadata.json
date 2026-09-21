@@ -1,0 +1,28 @@
+{
+  "xai_version": "v1_deepshap_logit_targetbg32_raw8",
+  "shap_version": "0.52.0",
+  "method": "DeepExplainer",
+  "explanation_scale": "model logit",
+  "background_source": "unlabeled target adaptation fold",
+  "background_size": 32,
+  "top_k": 3,
+  "target_labels_used_for_explanation": false,
+  "source_raw_data_used": false,
+  "raw_features": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak"
+  ],
+  "models": [
+    "source_only",
+    "pseudo_label_sfda",
+    "entropy_sfda",
+    "reliability_gated_sfda",
+    "conservative_candidate"
+  ]
+}

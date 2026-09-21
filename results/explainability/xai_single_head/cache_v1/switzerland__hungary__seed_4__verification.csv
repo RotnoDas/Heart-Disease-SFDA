@@ -1,0 +1,6 @@
+source,target,seed,model_state,max_probability_difference,mean_probability_difference,passed
+switzerland,hungary,4,source_only,1.1920928966180355e-07,4.460211545525398e-09,True
+switzerland,hungary,4,pseudo_label_sfda,1.1102230246251565e-16,3.587455351679928e-17,True
+switzerland,hungary,4,entropy_sfda,1.1102230246251565e-16,4.153895670366232e-17,True
+switzerland,hungary,4,reliability_gated_sfda,1.1102230246251565e-16,3.2098284725557246e-17,True
+switzerland,hungary,4,conservative_candidate,1.1102230246251565e-16,3.2098284725557246e-17,True
