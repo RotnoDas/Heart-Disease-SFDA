@@ -1,0 +1,18 @@
+{
+  "source_files": {
+    "single_head_seed_metrics": "D:\\heart disease\\results\\final\\performance_tables\\single_head_seed_level_metrics.csv",
+    "cross_source_deltas": "D:\\heart disease\\results\\cross_source\\cross_source_multiseed_deltas.csv",
+    "dlar_seed_metrics": "D:\\heart disease\\results\\final\\performance_tables\\dlar_lcl_seed_level_metrics.csv",
+    "xai_stability": "D:\\heart disease\\results\\explainability\\xai_single_head\\explanation_stability_seed.csv",
+    "xai_global_importance": "D:\\heart disease\\results\\explainability\\xai_single_head\\global_feature_importance.csv"
+  },
+  "model_training_performed": false,
+  "adaptation_performed": false,
+  "purpose": "presentation-only visualization of frozen experimental results",
+  "canonical_negative_adaptation_tolerance": 1e-08,
+  "notes": [
+    "Pair-balanced summaries first average 10 seeds within each direction, then summarize 12 directions equally.",
+    "DLAR-LCL is shown only against the architecture-matched dual-head source-only reference.",
+    "XAI analyses are post-hoc and exploratory; SHAP attribution is not causal importance."
+  ]
+}
