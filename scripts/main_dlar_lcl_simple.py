@@ -6,6 +6,9 @@ import torch.nn.functional as F
 from pathlib import Path
 import sys
 import shap
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 # Setup paths
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,6 +109,61 @@ def compute_and_print_xai(model, X, feature_names, device):
             print(f"  {i+1}. {feature_names[idx]:<25} (Importance Score: {mean_abs_shap[idx]:.4f})")
     print("=" * 60)
 
+def plot_confusion_matrix(y_true, y_pred, target_name, title_prefix="SFDA", filename_suffix=""):
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['Healthy (0)', 'Disease (1)'],
+                yticklabels=['Healthy (0)', 'Disease (1)'])
+    plt.title(f'{title_prefix} Confusion Matrix - {target_name.upper()}')
+    plt.ylabel('Actual')
+    plt.xlabel('Predicted')
+    plt.tight_layout()
+    out_dir = ROOT / "figures" / "simple_sfda"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out_dir / f"cm_{target_name}{filename_suffix}.png")
+    plt.close()
+
+def plot_grouped_accuracy_bar(targets, baseline_accs, adapted_accs, source_name):
+    import numpy as np
+    x = np.arange(len(targets))
+    width = 0.35
+    
+    fig, ax = plt.subplots(figsize=(10, 6))
+    rects1 = ax.bar(x - width/2, baseline_accs, width, label='Baseline (Source Only)', color='lightcoral')
+    rects2 = ax.bar(x + width/2, adapted_accs, width, label='Proposed SFDA', color='mediumseagreen')
+    
+    ax.set_ylabel('Accuracy (%)')
+    ax.set_title(f'Baseline vs SFDA Performance (Source: {source_name.upper()})')
+    ax.set_xticks(x)
+    ax.set_xticklabels([t.upper() for t in targets])
+    ax.set_ylim(0, 100)
+    ax.legend()
+    
+    for rects in [rects1, rects2]:
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(f'{height:.1f}%',
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 3), textcoords="offset points",
+                        ha='center', va='bottom', fontweight='bold')
+    
+    plt.tight_layout()
+    out_dir = ROOT / "figures" / "simple_sfda"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out_dir / f"accuracy_comparison_{source_name}.png")
+    plt.close()
+
+def predict_baseline(model, X, device):
+    """Simple inference without PC-TTA for baseline evaluation."""
+    model.eval()
+    X_tensor = torch.tensor(X, dtype=torch.float32).to(device)
+    with torch.no_grad():
+        _, l1, l2 = model(X_tensor)
+        p1, p2 = F.softmax(l1, dim=1), F.softmax(l2, dim=1)
+        p_cmb = (p1 + p2) / 2.0
+        return p_cmb.argmax(dim=1).cpu().numpy()
+
 def predict_with_pctta(model, X, device, entropy_threshold=0.9):
     """Prediction Confidence-aware Test-Time Augmentation (PC-TTA) for inference."""
     model.eval()
@@ -153,64 +211,105 @@ def predict_with_pctta(model, X, device, entropy_threshold=0.9):
 def main():
     parser = argparse.ArgumentParser(description="Standalone SF-UDA for Heart Disease (DLAR-LCL)")
     parser.add_argument("--source", type=str, default="cleveland", help="Source hospital name")
-    parser.add_argument("--target", type=str, default="hungary", help="Target hospital name")
+    parser.add_argument("--target", type=str, default="all", help="Target hospital name, or 'all' for all other hospitals")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     args = parser.parse_args()
 
     set_seed(args.seed)
     device = get_device()
     
+    ALL_DOMAINS = ["cleveland", "hungary", "switzerland", "va_long_beach"]
+    
+    if args.target.lower() == "all":
+        targets = [d for d in ALL_DOMAINS if d != args.source.lower()]
+    else:
+        targets = [args.target.lower()]
+
     print("=" * 60)
-    print(f" Source-Free Domain Adaptation: {args.source.upper()} -> {args.target.upper()}")
+    print(f" Source-Free Domain Adaptation (SFDA) | Source: {args.source.upper()}")
     print("=" * 60)
 
-    # 1. Load Data
+    # 1. Load & Process Source Data
     X_source_raw, y_source = load_hospital_data(args.source)
-    X_target_raw, y_target = load_hospital_data(args.target)
-
-    # 2. Source-only Preprocessing (Target data is transformed using Source fitted scaler)
     preprocessor = build_linear_preprocessor()
     X_source = preprocessor.fit_transform(X_source_raw).astype(np.float32)
-    X_target = preprocessor.transform(X_target_raw).astype(np.float32)
 
-    # 3. Train Pre-trained Source Model (Equivalent to loading weights in Emotion SF-UDA)
+    # 2. Train Pre-trained Source Model
     source_model = train_source_model(X_source, y_source, device)
     
-    # 4. Source-Free Domain Adaptation (DLAR & LCL) on Target Data
-    print(f"\n--> Starting SFDA (DLAR-LCL) on Target Data ({len(X_target)} samples)...")
-    print("    * No Source labels or Source data is used here!")
-    
-    adapted_model, diagnostics = adapt_dlar_lcl(
-        source_model=source_model,
-        X_target_unlabeled=X_target, # Unlabeled Target Data
-        device=device,
-        learning_rate=1e-4,
-        weight_decay=5e-4,
-        dlar_epochs=5,
-        lcl_epochs=10,
-        beta=1.0,
-        gamma=1.0,
-        k_neighbors=5,
-    )
-    print("--> Adaptation Complete.")
+    baseline_accuracies = []
+    adapted_accuracies = []
+    import copy
 
-    # 5. Evaluate on Target Data with PC-TTA
-    print("\n--> Evaluating Adapted Model with PC-TTA (Prediction Confidence-aware Test-Time Augmentation)...")
-    adapted_predictions = predict_with_pctta(adapted_model, X_target, device, entropy_threshold=0.9)
-    
-    # Compute basic accuracy for quick view
-    accuracy = np.mean(adapted_predictions == y_target) * 100
-    
+    for target in targets:
+        print("\n" + "*" * 60)
+        print(f" TESTING ON TARGET: {target.upper()}")
+        print("*" * 60)
+        
+        # Load Target Data
+        X_target_raw, y_target = load_hospital_data(target)
+        X_target = preprocessor.transform(X_target_raw).astype(np.float32)
+        
+        # Baseline Evaluation (Source-only model on Target)
+        print(f"--> Evaluating Baseline (Source-Only) Model on {target.upper()}...")
+        baseline_preds = predict_baseline(source_model, X_target, device)
+        baseline_acc = np.mean(baseline_preds == y_target) * 100
+        baseline_accuracies.append(baseline_acc)
+        print(f"[ BASELINE ] {target.upper()} Accuracy: {baseline_acc:.2f}%\n")
+        
+        # Plot Baseline Confusion Matrix
+        plot_confusion_matrix(y_target, baseline_preds, target, title_prefix="Baseline", filename_suffix="_baseline")
+        
+        # Deepcopy the source model so adaptation on one target doesn't affect another
+        model_to_adapt = copy.deepcopy(source_model)
+        
+        # 3. Source-Free Domain Adaptation (DLAR & LCL)
+        print(f"--> Starting SFDA (DLAR-LCL) on {target.upper()} ({len(X_target)} samples)...")
+        adapted_model, diagnostics = adapt_dlar_lcl(
+            source_model=model_to_adapt,
+            X_target_unlabeled=X_target,
+            device=device,
+            learning_rate=1e-4,
+            weight_decay=5e-4,
+            dlar_epochs=5,
+            lcl_epochs=10,
+            beta=1.0,
+            gamma=1.0,
+            k_neighbors=5,
+        )
+        
+        # 4. Evaluate with PC-TTA
+        print(f"--> Evaluating Adapted Model on {target.upper()} with PC-TTA...")
+        adapted_predictions = predict_with_pctta(adapted_model, X_target, device, entropy_threshold=0.9)
+        
+        accuracy = np.mean(adapted_predictions == y_target) * 100
+        adapted_accuracies.append(accuracy)
+        
+        print(f"\n[ PROPOSED SFDA ] {target.upper()} Accuracy: {accuracy:.2f}%")
+        
+        # Plot Adapted Confusion Matrix
+        plot_confusion_matrix(y_target, adapted_predictions, target, title_prefix="Proposed SFDA", filename_suffix="_adapted")
+        
+        # 5. Explainable AI (SHAP)
+        feature_names = preprocessor.get_feature_names_out()
+        compute_and_print_xai(adapted_model, X_target, feature_names, device)
+
+    # 6. Print Final Summary
     print("\n" + "=" * 60)
-    print(" RESULTS")
+    print(" FINAL CROSS-DOMAIN EVALUATION SUMMARY")
     print("=" * 60)
-    print(f"Target Hospital: {args.target.upper()}")
-    print(f"Test Accuracy:   {accuracy:.2f}%")
+    print(f"Source Model: {args.source.upper()}")
+    for t, b_acc, a_acc in zip(targets, baseline_accuracies, adapted_accuracies):
+        print(f"  -> Target: {t.upper():<15} | Baseline: {b_acc:.2f}% | Proposed: {a_acc:.2f}%")
+    print("-" * 60)
+    avg_b = np.mean(baseline_accuracies)
+    avg_a = np.mean(adapted_accuracies)
+    print(f"  AVERAGE ACCURACY | Baseline: {avg_b:.2f}% | Proposed: {avg_a:.2f}%")
     print("=" * 60)
 
-    # 6. Explainable AI (SHAP)
-    feature_names = preprocessor.get_feature_names_out()
-    compute_and_print_xai(adapted_model, X_target, feature_names, device)
+    # 7. Plot Accuracy Bar Chart
+    plot_grouped_accuracy_bar(targets, baseline_accuracies, adapted_accuracies, args.source)
+    print("\n* All graphs (Confusion Matrices & Grouped Bar Chart) have been saved to 'figures/simple_sfda/'")
 
 if __name__ == "__main__":
     main()
